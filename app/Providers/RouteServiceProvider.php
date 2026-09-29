@@ -24,10 +24,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Limita las peticiones a la API para evitar abuso y controlar el consumo por usuario o IP.
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
+        // Registra los archivos de rutas web y API del proyecto con sus middlewares correspondientes.
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')

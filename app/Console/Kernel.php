@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        // Aquí se definen tareas programadas del sistema, como respaldo, limpieza o avisos automáticos.
         // $schedule->command('inspire')->hourly();
     }
 
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
+        // Carga comandos personalizados del proyecto para que queden disponibles en artisan.
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');

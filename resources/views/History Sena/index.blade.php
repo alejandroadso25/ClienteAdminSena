@@ -5,7 +5,7 @@
 @section('content')
     <div class="history-page">
         <div class="history-heading">
-            <p class="eyebrow text-success mb-2">CONOCE NUESTRA INSTITUCIÓN</p>
+            <p class="eyebrow text-success">CONOCE NUESTRA INSTITUCIÓN</p>
             <h1>Historia del SENA</h1>
             <p>Una institución colombiana al servicio de la formación y el desarrollo social.</p>
         </div>

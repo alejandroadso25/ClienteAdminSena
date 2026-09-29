@@ -6,7 +6,7 @@
     <section class="resource-page container" aria-labelledby="catalog-title">
         <div class="page-heading">
             <div>
-                <p class="eyebrow">VISTA PREVIA</p>
+                <p class="eyebrow">REGISTROS</p>
                 <h1 id="catalog-title">{{ $title }}</h1>
                 <p>{{ $description }}</p>
             </div>
@@ -22,17 +22,14 @@
                         @endforeach
                     </tr>
                 </thead>
+                {{-- El controlador entrega las áreas para renderizar la tabla en el servidor. --}}
                 <tbody>
-                    @forelse ($rows as $row)
+                    @forelse ($areas as $area)
                         <tr>
-                            @foreach ($row as $value)
-                                <td>{{ $value }}</td>
-                            @endforeach
+                            <td>{{ $area['name'] ?? '' }}</td>
                         </tr>
                     @empty
-                        <tr>
-                            <td colspan="{{ count($columns) }}">No hay datos de muestra.</td>
-                        </tr>
+                        <tr><td colspan="{{ count($columns) }}">No hay registros disponibles.</td></tr>
                     @endforelse
                 </tbody>
             </table>

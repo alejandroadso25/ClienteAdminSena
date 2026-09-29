@@ -16,7 +16,11 @@ return [
 
 
     'adminsena_api' => [
-    'base_url' => env('API_URL','http://api.adminsena.test/v1'),
+        'base_url' => env('API_URL', 'http://api.adminsena.test/v1'),
+        'storage_url' => env(
+            'API_STORAGE_URL',
+            rtrim(preg_replace('~/v1/?$~', '', env('API_URL', 'http://api.adminsena.test/v1')), '/') . '/storage'
+        ),
     ],
     
     

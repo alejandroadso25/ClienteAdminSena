@@ -11,7 +11,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Aquí se registran servicios y bindings personalizados antes de que la app arranque.
     }
 
     /**
@@ -19,6 +19,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Aquí se inicializan configuraciones globales, vistas compartidas o servicios del sistema.
     }
 }

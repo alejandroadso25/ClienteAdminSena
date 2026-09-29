@@ -6,7 +6,7 @@
     <section class="resource-page container" aria-labelledby="catalog-title">
         <div class="page-heading">
             <div>
-                <p class="eyebrow">VISTA PREVIA</p>
+                <p class="eyebrow">REGISTROS</p>
                 <h1 id="catalog-title">{{ $title }}</h1>
                 <p>{{ $description }}</p>
             </div>
@@ -22,17 +22,22 @@
                         @endforeach
                     </tr>
                 </thead>
+                {{-- El controlador entrega los instructores para renderizar la tabla en el servidor. --}}
                 <tbody>
-                    @forelse ($rows as $row)
+                    @forelse ($teachers as $teacher)
                         <tr>
-                            @foreach ($row as $value)
-                                <td>{{ $value }}</td>
-                            @endforeach
+                            <td>
+                                @if (data_get($teacher, 'image.path'))
+                                    <img class="record-thumbnail" src="{{ rtrim(config('services.adminsena_api.storage_url'), '/') . '/' . ltrim(data_get($teacher, 'image.path'), '/') }}" alt="{{ data_get($teacher, 'image.alt_text', 'Instructor ' . data_get($teacher, 'name', '')) }}" loading="lazy">
+                                @else
+                                    <span class="image-unavailable">Sin imagen</span>
+                                @endif
+                            </td>
+                            <td>{{ $teacher['name'] ?? '' }}</td>
+                            <td>{{ $teacher['email'] ?? '' }}</td>
                         </tr>
                     @empty
-                        <tr>
-                            <td colspan="{{ count($columns) }}">No hay datos de muestra.</td>
-                        </tr>
+                        <tr><td colspan="{{ count($columns) }}">No hay registros disponibles.</td></tr>
                     @endforelse
                 </tbody>
             </table>

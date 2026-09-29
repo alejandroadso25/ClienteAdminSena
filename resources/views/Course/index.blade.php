@@ -6,7 +6,7 @@
     <section class="resource-page container" aria-labelledby="catalog-title">
         <div class="page-heading">
             <div>
-                <p class="eyebrow">VISTA PREVIA</p>
+                <p class="eyebrow">REGISTROS</p>
                 <h1 id="catalog-title">{{ $title }}</h1>
                 <p>{{ $description }}</p>
             </div>
@@ -22,17 +22,22 @@
                         @endforeach
                     </tr>
                 </thead>
+                {{-- El controlador entrega los cursos para renderizar la tabla en el servidor. --}}
                 <tbody>
-                    @forelse ($rows as $row)
+                    @forelse ($courses as $course)
                         <tr>
-                            @foreach ($row as $value)
-                                <td>{{ $value }}</td>
-                            @endforeach
+                            <td>
+                                @forelse (collect(data_get($course, 'images', []))->filter(fn ($image) => data_get($image, 'path')) as $courseImage)
+                                    <img class="record-thumbnail" src="{{ rtrim(config('services.adminsena_api.storage_url'), '/') . '/' . ltrim(data_get($courseImage, 'path'), '/') }}" alt="{{ data_get($courseImage, 'alt_text', 'Curso ' . data_get($course, 'course_number', '')) }}" loading="lazy">
+                                @empty
+                                    <span class="image-unavailable">Sin imagen</span>
+                                @endforelse
+                            </td>
+                            <td>{{ data_get($course, 'program_name') ?: data_get($course, 'course_number', 'Sin nombre') }}</td>
+                            <td>{{ $course['day'] ?? '' }}</td>
                         </tr>
                     @empty
-                        <tr>
-                            <td colspan="{{ count($columns) }}">No hay datos de muestra.</td>
-                        </tr>
+                        <tr><td colspan="{{ count($columns) }}">No hay registros disponibles.</td></tr>
                     @endforelse
                 </tbody>
             </table>

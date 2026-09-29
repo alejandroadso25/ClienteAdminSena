@@ -1,61 +1,91 @@
-{{-- Carrusel Bootstrap con las cinco imágenes disponibles en public/assets. --}}
-<section id="senaCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" aria-label="Destacados de AdminSena">
-    {{-- Los indicadores permiten saltar directamente a cada imagen. --}}
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#senaCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Mostrar primera imagen"></button>
-        <button type="button" data-bs-target="#senaCarousel" data-bs-slide-to="1" aria-label="Mostrar segunda imagen"></button>
-        <button type="button" data-bs-target="#senaCarousel" data-bs-slide-to="2" aria-label="Mostrar tercera imagen"></button>
-        <button type="button" data-bs-target="#senaCarousel" data-bs-slide-to="3" aria-label="Mostrar cuarta imagen"></button>
-        <button type="button" data-bs-target="#senaCarousel" data-bs-slide-to="4" aria-label="Mostrar quinta imagen"></button>
+<section class="hero-carousel" data-carousel aria-label="Presentación del SENA">
+    <div class="carousel-slides" aria-live="polite">
+        <article class="carousel-slide carousel-slide--one is-active" aria-hidden="false">
+            <div class="container carousel-content">
+                <p class="eyebrow">ADMINISTRACIÓN ACADÉMICA</p>
+                <h1>El SENA es de todos</h1>
+                <p>Gestiona la formación, los instructores y los aprendices desde un solo lugar.</p>
+            </div>
+        </article>
+        <article class="carousel-slide carousel-slide--two" aria-hidden="true">
+            <div class="container carousel-content">
+                <p class="eyebrow">GESTIÓN</p>
+                <h2>Recursos y servicios</h2>
+                <p>Consulta cursos, instructores, aprendices y los recursos de formación.</p>
+            </div>
+        </article>
+        <article class="carousel-slide carousel-slide--three" aria-hidden="true">
+            <div class="container carousel-content">
+                <p class="eyebrow">FORMACIÓN</p>
+                <h2>Oportunidades para crecer</h2>
+                <p>Encuentra información para impulsar tu aprendizaje y tu futuro.</p>
+            </div>
+        </article>
     </div>
 
-    {{-- Cada diapositiva presenta un módulo del sistema y su enlace correspondiente. --}}
-    <div class="carousel-inner">
-        <div class="carousel-item active carousel-image carousel-image-1">
-            <div class="container hero-content">
-                <div class="hero-copy">
-                    <p class="eyebrow">ADMINISTRACIÓN ACADÉMICA</p>
-                    <h1>El SENA<br><strong>es de todos</strong></h1>
-                    <p class="hero-text">Gestiona la formación, los instructores y los aprendices desde un solo lugar.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-item carousel-image carousel-image-2">
-            <div class="container hero-content">
-                <div class="hero-copy">
-                    <p class="eyebrow">FORMACIÓN PARA EL FUTURO</p>
-                    <h1>Aprende y<br><strong>crece</strong></h1>
-                    <p class="hero-text">Consulta los cursos y organiza la oferta académica de tu centro.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-item carousel-image carousel-image-3">
-            <div class="container hero-content">
-                <div class="hero-copy">
-                    <p class="eyebrow">COMUNIDAD SENA</p>
-                    <h1>Personas que<br><strong>transforman</strong></h1>
-                    <p class="hero-text">Mantén actualizada la información de instructores y aprendices.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-item carousel-image carousel-image-4">
-            <div class="container hero-content"><div class="hero-copy"><p class="eyebrow">RECURSOS DISPONIBLES</p><h1>Conecta tus<br><strong>recursos</strong></h1><p class="hero-text">Administra computadores y centros de formación desde un mismo panel.</p></div></div>
-        </div>
-
-        <div class="carousel-item carousel-image carousel-image-5">
-            <div class="container hero-content"><div class="hero-copy"><p class="eyebrow">GESTIÓN SENCILLA</p><h1>Todo en<br><strong>un lugar</strong></h1><p class="hero-text">Accede rápidamente a cada módulo de AdminSena.</p></div></div>
-        </div>
+    <button class="carousel-control carousel-control--previous" type="button" data-carousel-previous aria-label="Diapositiva anterior">&#8592;</button>
+    <button class="carousel-control carousel-control--next" type="button" data-carousel-next aria-label="Diapositiva siguiente">&#8594;</button>
+    <div class="carousel-indicators" role="group" aria-label="Seleccionar diapositiva">
+        <button type="button" class="is-active" data-carousel-indicator="0" aria-label="Mostrar diapositiva 1" aria-current="true"></button>
+        <button type="button" data-carousel-indicator="1" aria-label="Mostrar diapositiva 2" aria-current="false"></button>
+        <button type="button" data-carousel-indicator="2" aria-label="Mostrar diapositiva 3" aria-current="false"></button>
     </div>
-
-    <button class="carousel-control-prev" type="button" data-bs-target="#senaCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Anterior</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#senaCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Siguiente</span>
-    </button>
 </section>
+
+@push('scripts')
+<script>
+    document.querySelectorAll('[data-carousel]').forEach((carousel) => {
+        const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
+        const indicators = Array.from(carousel.querySelectorAll('[data-carousel-indicator]'));
+        let activeIndex = 0;
+        let timer;
+        let isHovered = false;
+        let isFocused = false;
+
+        const showSlide = (index) => {
+            activeIndex = (index + slides.length) % slides.length;
+            slides.forEach((slide, slideIndex) => {
+                const isActive = slideIndex === activeIndex;
+                slide.classList.toggle('is-active', isActive);
+                slide.setAttribute('aria-hidden', String(!isActive));
+                indicators[slideIndex].classList.toggle('is-active', isActive);
+                indicators[slideIndex].setAttribute('aria-current', String(isActive));
+            });
+        };
+
+        const stopTimer = () => {
+            window.clearInterval(timer);
+            timer = undefined;
+        };
+
+        // El avance automático se pausa mientras el usuario apunta o navega con teclado.
+        const startTimer = () => {
+            stopTimer();
+            if (!isHovered && !isFocused && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                timer = window.setInterval(() => showSlide(activeIndex + 1), 6000);
+            }
+        };
+
+        carousel.querySelector('[data-carousel-previous]').addEventListener('click', () => showSlide(activeIndex - 1));
+        carousel.querySelector('[data-carousel-next]').addEventListener('click', () => showSlide(activeIndex + 1));
+        indicators.forEach((indicator, index) => indicator.addEventListener('click', () => showSlide(index)));
+        carousel.addEventListener('mouseenter', () => {
+            isHovered = true;
+            stopTimer();
+        });
+        carousel.addEventListener('mouseleave', () => {
+            isHovered = false;
+            startTimer();
+        });
+        carousel.addEventListener('focusin', () => {
+            isFocused = true;
+            stopTimer();
+        });
+        carousel.addEventListener('focusout', (event) => {
+            isFocused = carousel.contains(event.relatedTarget);
+            startTimer();
+        });
+        startTimer();
+    });
+</script>
+@endpush
