@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'AdminSena')</title>
 
-    @include('Includes.dependencias')
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layouts/footer.css') }}">
+    @if (request()->routeIs('home'))
+        <link rel="stylesheet" href="{{ asset('css/layouts/home.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/layouts/carousel.css') }}">
+    @endif
     <style>
         .sena-logo {
             background-image: url('http://api.adminsena.test/storage/images/Logo%20Sena.png');
@@ -111,7 +115,6 @@
     @endif
     {{-- El pie se comparte entre las páginas públicas y los listados administrativos. --}}
     @include('Includes.footer')
-    @include('Includes.dependenciasbody')
     @stack('scripts')
 </body>
 </html>
