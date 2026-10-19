@@ -413,6 +413,24 @@ main {
     box-shadow: none;
 }
 
+/* El enlace de inicio queda visible junto al menú en todas las pantallas administrativas. */
+.admin-home-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid #64748b;
+    border-radius: 5px;
+    color: #f8fafc;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.admin-home-link:hover {
+    background: #1f2937;
+}
+
 .admin-navbar .nav-links {
     justify-content: flex-end;
 }

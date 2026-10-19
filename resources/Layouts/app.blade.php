@@ -40,6 +40,8 @@
             <a class="admin-brand" href="{{ route('home') }}" aria-label="Ir al inicio de AdminSena">
                 <span class="admin-brand-mark sena-logo" role="img" aria-label="Logo SENA"></span>
             </a>
+            {{-- Este acceso textual lleva al home desde cualquier tabla o formulario administrativo. --}}
+            <a class="admin-home-link" href="{{ route('home') }}">Ir al inicio</a>
             <nav class="nav-links" aria-label="Navegación de registros">
                 <div class="nav-dropdown">
                     <details>
@@ -114,8 +116,10 @@
     </main>
 
     @endif
-    {{-- El pie se comparte entre las páginas públicas y los listados administrativos desde resources/Includes. --}}
-    @include('includes::footer')
+    {{-- El footer se conserva en páginas públicas y se omite en los módulos de tablas y formularios. --}}
+    @unless (request()->routeIs('computers.*', 'apprentices.*', 'areas.*', 'courses.*', 'course-teachers.*', 'teachers.*', 'training-centers.*'))
+        @include('includes::footer')
+    @endunless
     @stack('scripts')
 </body>
 </html>
