@@ -4,25 +4,33 @@
 
 @section('content')
     <section class="resource-page container" aria-labelledby="catalog-title">
+        @if (session('status'))
+            <p class="success-message" role="status">{{ session('status') }}</p>
+        @endif
+
         <div class="page-heading">
             <div>
                 <p class="eyebrow">REGISTROS</p>
-                <h1 id="catalog-title">{{ $title }}</h1>
-                <p>{{ $description }}</p>
+                <h1 id="catalog-title">Aprendices</h1>
+                <p>Directorio de aprendices registrados.</p>
             </div>
-            <a class="secondary-button" href="{{ url('/') }}">Volver al inicio</a>
+            <div class="modal-actions">
+                <a class="primary-button" href="{{ route('apprentices.create') }}">Nuevo aprendiz</a>
+                <a class="secondary-button" href="{{ url('/') }}">Volver al inicio</a>
+            </div>
         </div>
 
+        {{-- El listado usa los aprendices que el controlador consulta en el API central. --}}
         <div class="table-wrapper">
             <table>
                 <thead>
                     <tr>
-                        @foreach ($columns as $column)
-                            <th scope="col">{{ $column }}</th>
-                        @endforeach
+                        <th scope="col">Imagen</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Celular</th>
                     </tr>
                 </thead>
-                {{-- El controlador entrega los aprendices para renderizar la tabla en el servidor. --}}
                 <tbody>
                     @forelse ($apprentices as $apprentice)
                         <tr>
@@ -38,7 +46,7 @@
                             <td>{{ $apprentice['cell_number'] ?? '' }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="{{ count($columns) }}">No hay registros disponibles.</td></tr>
+                        <tr><td colspan="4">No hay registros disponibles.</td></tr>
                     @endforelse
                 </tbody>
             </table>

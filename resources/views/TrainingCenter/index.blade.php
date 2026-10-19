@@ -4,25 +4,59 @@
 
 @section('content')
     <section class="resource-page container" aria-labelledby="catalog-title">
+        @if (session('status'))
+            <p class="success-message" role="status">{{ session('status') }}</p>
+        @endif
+        @if ($errors->any())
+            <div class="error-message" role="alert">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
         <div class="page-heading">
             <div>
                 <p class="eyebrow">REGISTROS</p>
-                <h1 id="catalog-title">{{ $title }}</h1>
-                <p>{{ $description }}</p>
+                <h1 id="catalog-title">Centros de formación</h1>
+                <p>Centros de formación registrados.</p>
             </div>
-            <a class="secondary-button" href="{{ url('/') }}">Volver al inicio</a>
+            <div class="modal-actions">
+                <a class="primary-button" href="{{ route('training-centers.create') }}">Nuevo centro</a>
+                <a class="secondary-button" href="{{ url('/') }}">Volver al inicio</a>
+            </div>
         </div>
 
+        {{-- El formulario crea centros; las modificaciones quedan a cargo del API central. --}}
+        @if ($showForm ?? false)
+            <form class="page" method="POST" action="{{ route('training-centers.store') }}">
+                @csrf
+                <div class="form-grid">
+                    <label class="form-field" for="training-center-name">
+                        <span>Nombre</span>
+                        <input id="training-center-name" name="name" type="text" value="{{ old('name') }}" maxlength="255" required>
+                    </label>
+                    <label class="form-field" for="training-center-location">
+                        <span>Ubicación</span>
+                        <input id="training-center-location" name="location" type="text" value="{{ old('location') }}" maxlength="255">
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button class="primary-button" type="submit">Crear centro</button>
+                    <a class="secondary-button" href="{{ route('training-centers.index') }}">Cancelar</a>
+                </div>
+            </form>
+        @endif
+
+        {{-- Las filas y sus imágenes se obtienen del API central. --}}
         <div class="table-wrapper">
             <table>
                 <thead>
                     <tr>
-                        @foreach ($columns as $column)
-                            <th scope="col">{{ $column }}</th>
-                        @endforeach
+                        <th scope="col">Imagen</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Ubicación</th>
                     </tr>
                 </thead>
-                {{-- El controlador entrega los centros para renderizar la tabla en el servidor. --}}
                 <tbody>
                     @forelse ($trainingCenters as $trainingCenter)
                         <tr>
@@ -37,7 +71,7 @@
                             <td>{{ $trainingCenter['location'] ?? '' }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="{{ count($columns) }}">No hay registros disponibles.</td></tr>
+                        <tr><td colspan="3">No hay registros disponibles.</td></tr>
                     @endforelse
                 </tbody>
             </table>

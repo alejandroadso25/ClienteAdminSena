@@ -16,10 +16,11 @@ return [
 
 
     'adminsena_api' => [
-        'base_url' => env('API_URL', 'http://api.adminsena.test/v1'),
+        // URL_SERVER_API apunta a la raíz del backend; la versión se añade aquí una sola vez.
+        'base_url' => rtrim(env('URL_SERVER_API', 'http://api.adminsena.test'), '/') . '/v1',
         'storage_url' => env(
             'API_STORAGE_URL',
-            rtrim(preg_replace('~/v1/?$~', '', env('API_URL', 'http://api.adminsena.test/v1')), '/') . '/storage'
+            rtrim(env('URL_SERVER_API', 'http://api.adminsena.test'), '/') . '/storage'
         ),
     ],
     

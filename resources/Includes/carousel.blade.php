@@ -34,6 +34,7 @@
 
 @push('scripts')
 <script>
+    // Este script mantiene sincronizados los controles accesibles y la diapositiva visible.
     const carousel = document.querySelector('[data-carousel]');
 
     if (carousel) {

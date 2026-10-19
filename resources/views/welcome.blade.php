@@ -1,10 +1,10 @@
-﻿@extends('Layouts.app')
+@extends('Layouts.app')
 
 @section('title', 'AdminSena | Inicio')
 
 @section('content')
-    {{-- El carrusel reemplaza el hero estático y usa controles JavaScript propios. --}}
-    @include('Layouts.carousel')
+    {{-- El carrusel compartido vive en resources/Includes y contiene sus propios controles. --}}
+    @include('includes::carousel')
 
     <section class="home-news-section home-container">
         <div class="home-section-header">

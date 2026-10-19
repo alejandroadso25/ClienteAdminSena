@@ -1,3 +1,4 @@
+{{-- Parcial institucional compartido por el inicio público y las páginas administrativas. --}}
 <footer class="site-footer">
     <div class="container footer-grid">
         <div>

@@ -2,28 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 class ComputerController extends Controller
 {
-    // Consulta el endpoint de computadores y devuelve el JSON recibido.
-    private function fetchDataFromApi(string $url): array
-    {
-        $response = Http::get($url);
-
-        return $response->json() ?? [];
-    }
-
+    // Las rutas web renderizan Blade y delegan las lecturas y altas al API central.
     public function index(): View
     {
-        $url = rtrim(config('services.adminsena_api.base_url'), '/');
-        $computers = $this->fetchDataFromApi($url . '/computers');
-        $title = 'Computadores';
-        $description = 'Equipos registrados en el sistema.';
-        $columns = ['Imagen', 'Número', 'Marca'];
+        return $this->listing();
+    }
 
-        // Entrega la lista y los datos de presentación a la vista.
-        return view('Computer.index', compact('computers', 'title', 'description', 'columns'));
+    public function create(): View
+    {
+        return $this->listing(true);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        return $this->createApiResource($request, 'computers', 'computers.index', 'Computador creado correctamente.');
+    }
+
+    private function listing(bool $showForm = false): View
+    {
+        // La creación reutiliza el listado para mantener juntos el formulario y la tabla.
+        $url = rtrim(config('services.adminsena_api.base_url'), '/') . '/computers';
+
+        return view('Computer.index', [
+            'computers' => collect(Http::acceptJson()->timeout(10)->get($url)->throw()->json()),
+            'showForm' => $showForm,
+        ]);
     }
 }

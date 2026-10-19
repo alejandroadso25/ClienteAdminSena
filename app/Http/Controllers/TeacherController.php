@@ -2,29 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 class TeacherController extends Controller
 {
-    // Consulta el endpoint de instructores y devuelve el JSON recibido.
-    private function fetchDataFromApi(string $url): array
-    {
-        $response = Http::get($url);
-
-        return $response->json() ?? [];
-    }
-
+    // La vista Blade presenta los instructores obtenidos desde el API central.
     public function index(): View
     {
-        $url = rtrim(config('services.adminsena_api.base_url'), '/');
-        $teachers = $this->fetchDataFromApi($url . '/teachers');
-        $title = 'Instructores';
-        $description = 'Directorio de instructores registrados.';
-        // Se conserva la columna aunque el instructor no tenga foto registrada.
-        $columns = ['Imagen', 'Nombre', 'Correo'];
+        $url = rtrim(config('services.adminsena_api.base_url'), '/') . '/teachers';
+        $teachers = collect(Http::acceptJson()->timeout(10)->get($url)->throw()->json());
 
-        // Entrega la lista y los datos de presentación a la vista.
-        return view('Teacher.index', compact('teachers', 'title', 'description', 'columns'));
+        return view('Teacher.index', ['teachers' => $teachers, 'showForm' => false]);
+    }
+
+    public function create(): View
+    {
+        $baseUrl = rtrim(config('services.adminsena_api.base_url'), '/');
+
+        return view('Teacher.index', [
+            'teachers' => collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/teachers')->throw()->json()),
+            'areas' => collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/areas')->throw()->json()),
+            'trainingCenters' => collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/training-centers')->throw()->json()),
+            'showForm' => true,
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        return $this->createApiResource($request, 'teachers', 'teachers.index', 'Instructor creado correctamente.');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Aquí se inicializan configuraciones globales, vistas compartidas o servicios del sistema.
+        // Permite incluir parciales compartidos que viven en resources/Includes.
+        View::addNamespace('includes', resource_path('Includes'));
     }
 }

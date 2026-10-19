@@ -39,15 +39,15 @@
 
 /* Cada modificador asigna la imagen de fondo de su diapositiva. */
 .carousel-slide--one {
-    background-image: url('http://api.adminsena.test/storage/images/apren1.jpg');
+    background-image: url('../../storage/images/apren1.jpg');
 }
 
 .carousel-slide--two {
-    background-image: url('http://api.adminsena.test/storage/images/apren2.jpg');
+    background-image: url('../../storage/images/apren2.jpg');
 }
 
 .carousel-slide--three {
-    background-image: url('http://api.adminsena.test/storage/images/aprendi3.jpg');
+    background-image: url('../../storage/images/aprendi3.jpg');
 }
 
 .carousel-content {

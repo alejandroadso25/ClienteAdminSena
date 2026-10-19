@@ -2,29 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 class CourseController extends Controller
 {
-    // Consulta el endpoint de cursos y devuelve el JSON recibido.
-    private function fetchDataFromApi(string $url): array
-    {
-        $response = Http::get($url);
-
-        return $response->json() ?? [];
-    }
-
+    // La vista Blade presenta los datos obtenidos desde el endpoint de cursos del backend.
     public function index(): View
     {
-        $url = rtrim(config('services.adminsena_api.base_url'), '/');
-        $courses = $this->fetchDataFromApi($url . '/courses');
-        $title = 'Cursos';
-        $description = 'Cursos registrados en el sistema.';
-        // Cursos expone una lista de imágenes que puede estar vacía.
-        $columns = ['Imágenes', 'Programa / ficha', 'Día'];
+        $url = rtrim(config('services.adminsena_api.base_url'), '/') . '/courses';
+        $courses = collect(Http::acceptJson()->timeout(10)->get($url)->throw()->json());
 
-        // Entrega la lista y los datos de presentación a la vista.
-        return view('Course.index', compact('courses', 'title', 'description', 'columns'));
+        return view('Course.index', ['courses' => $courses, 'showForm' => false]);
+    }
+
+    public function create(): View
+    {
+        $baseUrl = rtrim(config('services.adminsena_api.base_url'), '/');
+
+        return view('Course.index', [
+            'courses' => collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/courses')->throw()->json()),
+            'areas' => collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/areas')->throw()->json()),
+            'trainingCenters' => collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/training-centers')->throw()->json()),
+            'showForm' => true,
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        return $this->createApiResource($request, 'courses', 'courses.index', 'Curso creado correctamente.');
     }
 }

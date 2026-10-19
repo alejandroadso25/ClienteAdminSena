@@ -13,7 +13,7 @@
     @endif
     <style>
         .sena-logo {
-            background-image: url('http://api.adminsena.test/storage/images/Logo%20Sena.png');
+            background-image: url('{{ asset('storage/images/Logo Sena.png') }}');
             background-size: cover;
             background-position: center;
         }
@@ -33,7 +33,8 @@
         ];
     @endphp
 
-    @if (request()->routeIs('computers.index', 'apprentices.index', 'areas.index', 'courses.index', 'course-teachers.index', 'teachers.index', 'training-centers.index'))
+    {{-- Los módulos de gestión usan una navegación administrativa distinta a la pública. --}}
+    @if (request()->routeIs('computers.*', 'apprentices.*', 'areas.*', 'courses.*', 'course-teachers.*', 'teachers.*', 'training-centers.*'))
     <div class="admin-shell">
         <header class="admin-navbar">
             <a class="admin-brand" href="{{ route('home') }}" aria-label="Ir al inicio de AdminSena">
@@ -58,7 +59,7 @@
                 <ul>
                     @foreach ($tableLinks as $tableLink)
                         <li>
-                            <a class="{{ request()->routeIs($tableLink['route']) ? 'active' : '' }}" href="{{ route($tableLink['route']) }}">
+                            <a class="{{ request()->routeIs(str_replace('.index', '.*', $tableLink['route'])) ? 'active' : '' }}" href="{{ route($tableLink['route']) }}">
                                 {{ $tableLink['label'] }}
                             </a>
                         </li>
@@ -113,8 +114,8 @@
     </main>
 
     @endif
-    {{-- El pie se comparte entre las páginas públicas y los listados administrativos. --}}
-    @include('Includes.footer')
+    {{-- El pie se comparte entre las páginas públicas y los listados administrativos desde resources/Includes. --}}
+    @include('includes::footer')
     @stack('scripts')
 </body>
 </html>
