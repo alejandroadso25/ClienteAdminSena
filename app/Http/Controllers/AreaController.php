@@ -16,7 +16,7 @@ class AreaController extends Controller
         $url = env('URL_SERVER_API');
         $areas = $this->fetchDataFromApi($url.'/areas');
 
-        return view('Area.index', [
+        return view('Areas.index', [
             'areas' => $areas,
             'showForm' => false,
         ]);
@@ -29,7 +29,7 @@ class AreaController extends Controller
         $url = env('URL_SERVER_API');
         $areas = $this->fetchDataFromApi($url.'/areas');
 
-        return view('Area.index', [
+        return view('Areas.index', [
             'areas' => $areas,
             'showForm' => true,
         ]);

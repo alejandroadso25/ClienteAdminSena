@@ -16,7 +16,7 @@ class CourseTeacherController extends Controller
         $url = env('URL_SERVER_API');
         $courseTeachers = $this->fetchDataFromApi($url.'/course-teachers');
 
-        return view('CourseTeacher.index', [
+        return view('CourseTeachers.index', [
             'courseTeachers' => $courseTeachers,
             'showForm' => false,
         ]);
@@ -28,7 +28,7 @@ class CourseTeacherController extends Controller
         // Variable de SERVER API:
         $url = env('URL_SERVER_API');
 
-        return view('CourseTeacher.index', [
+        return view('CourseTeachers.index', [
             'courseTeachers' => $this->fetchDataFromApi($url.'/course-teachers'),
             'courses' => $this->fetchDataFromApi($url.'/courses'),
             'teachers' => $this->fetchDataFromApi($url.'/teachers'),

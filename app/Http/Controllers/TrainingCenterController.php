@@ -16,7 +16,7 @@ class TrainingCenterController extends Controller
         $url = env('URL_SERVER_API');
         $trainingCenters = $this->fetchDataFromApi($url.'/training-centers');
 
-        return view('TrainingCenter.index', [
+        return view('TrainingCenters.index', [
             'trainingCenters' => $trainingCenters,
             'showForm' => false,
         ]);
@@ -29,7 +29,7 @@ class TrainingCenterController extends Controller
         $url = env('URL_SERVER_API');
         $trainingCenters = $this->fetchDataFromApi($url.'/training-centers');
 
-        return view('TrainingCenter.index', [
+        return view('TrainingCenters.index', [
             'trainingCenters' => $trainingCenters,
             'showForm' => true,
         ]);

@@ -16,7 +16,7 @@ class ComputerController extends Controller
         $url = env('URL_SERVER_API');
         $computers = $this->fetchDataFromApi($url.'/computers');
 
-        return view('Computer.index', [
+        return view('Computers.index', [
             'computers' => $computers,
             'showForm' => false,
         ]);
@@ -29,7 +29,7 @@ class ComputerController extends Controller
         $url = env('URL_SERVER_API');
         $computers = $this->fetchDataFromApi($url.'/computers');
 
-        return view('Computer.index', [
+        return view('Computers.index', [
             'computers' => $computers,
             'showForm' => true,
         ]);

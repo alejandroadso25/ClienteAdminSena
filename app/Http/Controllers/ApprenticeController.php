@@ -15,7 +15,7 @@ class ApprenticeController extends Controller
         $url = env('URL_SERVER_API');
         $apprentices = $this->fetchDataFromApi($url.'/apprentices');
 
-        return view('Apprentice.index', compact('apprentices'));
+        return view('Apprentices.index', compact('apprentices'));
     }
 
     // Mostrar el formulario de creación de aprendices:
@@ -24,7 +24,7 @@ class ApprenticeController extends Controller
         // Variable de SERVER API:
         $url = env('URL_SERVER_API');
 
-        return view('Apprentice.create', [
+        return view('Apprentices.create', [
             'courses' => $this->fetchDataFromApi($url.'/courses'),
             'computers' => $this->fetchDataFromApi($url.'/computers'),
         ]);
