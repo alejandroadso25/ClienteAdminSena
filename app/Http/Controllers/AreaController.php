@@ -9,40 +9,46 @@ use Illuminate\View\View;
 
 class AreaController extends Controller
 {
-    // Las rutas web renderizan Blade y delegan las lecturas y altas al API central.
+    // Consultar las áreas:
     public function index(): View
     {
-        return $this->listing();
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+        $areas = $this->fetchDataFromApi($url.'/areas');
+
+        return view('Area.index', [
+            'areas' => $areas,
+            'showForm' => false,
+        ]);
     }
 
+    // Mostrar el formulario de creación de áreas:
     public function create(): View
     {
-        return $this->listing(true);
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+        $areas = $this->fetchDataFromApi($url.'/areas');
+
+        return view('Area.index', [
+            'areas' => $areas,
+            'showForm' => true,
+        ]);
     }
 
+    // Crear área:
     public function store(Request $request): RedirectResponse
     {
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
-        // Solo se redirige al listado cuando la API confirma la creación sin error HTTP.
-        Http::acceptJson()->timeout(10)->post($url . '/areas', $request->all())->throw();
+        $url = env('URL_SERVER_API');
+        Http::post($url.'/areas', $request->all());
 
         return redirect()->route('areas.index');
     }
 
-    private function listing(bool $showForm = false): View
+    // Consultar a la API y devolver la respuesta en formato JSON:
+    private function fetchDataFromApi($url)
     {
-        // La creación reutiliza el listado para mantener juntos el formulario y la tabla.
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
+        $response = Http::get($url);
 
-        return view('Area.index', [
-            'areas' => collect($this->fetchDataFromApi($url . '/areas')),
-            'showForm' => $showForm,
-        ]);
-    }
-
-    private function fetchDataFromApi(string $url): mixed
-    {
-        // Devuelve el JSON del endpoint y lanza una excepción ante respuestas HTTP fallidas.
-        return Http::acceptJson()->timeout(10)->get($url)->throw()->json();
+        return $response->json();
     }
 }

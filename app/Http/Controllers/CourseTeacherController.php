@@ -9,40 +9,47 @@ use Illuminate\View\View;
 
 class CourseTeacherController extends Controller
 {
-    // La vista Blade presenta las asignaciones obtenidas desde el API central.
+    // Consultar las asignaciones de cursos e instructores:
     public function index(): View
     {
-        // URL_SERVER_API permite cambiar la API; por defecto se consulta AdminSena v1.
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
-        $courseTeachers = collect($this->fetchDataFromApi($url . '/course-teachers'));
-
-        return view('CourseTeacher.index', ['courseTeachers' => $courseTeachers, 'showForm' => false]);
-    }
-
-    public function create(): View
-    {
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+        $courseTeachers = $this->fetchDataFromApi($url.'/course-teachers');
 
         return view('CourseTeacher.index', [
-            'courseTeachers' => collect($this->fetchDataFromApi($url . '/course-teachers')),
-            'courses' => collect($this->fetchDataFromApi($url . '/courses')),
-            'teachers' => collect($this->fetchDataFromApi($url . '/teachers')),
+            'courseTeachers' => $courseTeachers,
+            'showForm' => false,
+        ]);
+    }
+
+    // Mostrar el formulario de creación de asignaciones:
+    public function create(): View
+    {
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+
+        return view('CourseTeacher.index', [
+            'courseTeachers' => $this->fetchDataFromApi($url.'/course-teachers'),
+            'courses' => $this->fetchDataFromApi($url.'/courses'),
+            'teachers' => $this->fetchDataFromApi($url.'/teachers'),
             'showForm' => true,
         ]);
     }
 
+    // Crear asignación:
     public function store(Request $request): RedirectResponse
     {
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
-        // Solo se redirige al listado cuando la API confirma la creación sin error HTTP.
-        Http::acceptJson()->timeout(10)->post($url . '/course-teachers', $request->all())->throw();
+        $url = env('URL_SERVER_API');
+        Http::post($url.'/course-teachers', $request->all());
 
         return redirect()->route('course-teachers.index');
     }
 
-    private function fetchDataFromApi(string $url): mixed
+    // Consultar a la API y devolver la respuesta en formato JSON:
+    private function fetchDataFromApi($url)
     {
-        // Devuelve el JSON del endpoint y lanza una excepción ante respuestas HTTP fallidas.
-        return Http::acceptJson()->timeout(10)->get($url)->throw()->json();
+        $response = Http::get($url);
+
+        return $response->json();
     }
 }

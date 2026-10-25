@@ -9,40 +9,46 @@ use Illuminate\View\View;
 
 class ComputerController extends Controller
 {
-    // Las rutas web renderizan Blade y delegan las lecturas y altas al API central.
+    // Consultar los computadores:
     public function index(): View
     {
-        return $this->listing();
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+        $computers = $this->fetchDataFromApi($url.'/computers');
+
+        return view('Computer.index', [
+            'computers' => $computers,
+            'showForm' => false,
+        ]);
     }
 
+    // Mostrar el formulario de creación de computadores:
     public function create(): View
     {
-        return $this->listing(true);
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+        $computers = $this->fetchDataFromApi($url.'/computers');
+
+        return view('Computer.index', [
+            'computers' => $computers,
+            'showForm' => true,
+        ]);
     }
 
+    // Crear computador:
     public function store(Request $request): RedirectResponse
     {
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
-        // Solo se redirige al listado cuando la API confirma la creación sin error HTTP.
-        Http::acceptJson()->timeout(10)->post($url . '/computers', $request->all())->throw();
+        $url = env('URL_SERVER_API');
+        Http::post($url.'/computers', $request->all());
 
         return redirect()->route('computers.index');
     }
 
-    private function listing(bool $showForm = false): View
+    // Consultar a la API y devolver la respuesta en formato JSON:
+    private function fetchDataFromApi($url)
     {
-        // La creación reutiliza el listado para mantener juntos el formulario y la tabla.
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
+        $response = Http::get($url);
 
-        return view('Computer.index', [
-            'computers' => collect($this->fetchDataFromApi($url . '/computers')),
-            'showForm' => $showForm,
-        ]);
-    }
-
-    private function fetchDataFromApi(string $url): mixed
-    {
-        // Devuelve el JSON del endpoint y lanza una excepción ante respuestas HTTP fallidas.
-        return Http::acceptJson()->timeout(10)->get($url)->throw()->json();
+        return $response->json();
     }
 }

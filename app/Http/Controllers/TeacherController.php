@@ -9,40 +9,47 @@ use Illuminate\View\View;
 
 class TeacherController extends Controller
 {
-    // La vista Blade presenta los instructores obtenidos desde el API central.
+    // Consultar los instructores:
     public function index(): View
     {
-        // URL_SERVER_API permite cambiar la API; por defecto se consulta AdminSena v1.
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
-        $teachers = collect($this->fetchDataFromApi($url . '/teachers'));
-
-        return view('Teacher.index', ['teachers' => $teachers, 'showForm' => false]);
-    }
-
-    public function create(): View
-    {
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+        $teachers = $this->fetchDataFromApi($url.'/teachers');
 
         return view('Teacher.index', [
-            'teachers' => collect($this->fetchDataFromApi($url . '/teachers')),
-            'areas' => collect($this->fetchDataFromApi($url . '/areas')),
-            'trainingCenters' => collect($this->fetchDataFromApi($url . '/training-centers')),
+            'teachers' => $teachers,
+            'showForm' => false,
+        ]);
+    }
+
+    // Mostrar el formulario de creación de instructores:
+    public function create(): View
+    {
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+
+        return view('Teacher.index', [
+            'teachers' => $this->fetchDataFromApi($url.'/teachers'),
+            'areas' => $this->fetchDataFromApi($url.'/areas'),
+            'trainingCenters' => $this->fetchDataFromApi($url.'/training-centers'),
             'showForm' => true,
         ]);
     }
 
+    // Crear instructor:
     public function store(Request $request): RedirectResponse
     {
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
-        // Solo se redirige al listado cuando la API confirma la creación sin error HTTP.
-        Http::acceptJson()->timeout(10)->post($url . '/teachers', $request->all())->throw();
+        $url = env('URL_SERVER_API');
+        Http::post($url.'/teachers', $request->all());
 
         return redirect()->route('teachers.index');
     }
 
-    private function fetchDataFromApi(string $url): mixed
+    // Consultar a la API y devolver la respuesta en formato JSON:
+    private function fetchDataFromApi($url)
     {
-        // Devuelve el JSON del endpoint y lanza una excepción ante respuestas HTTP fallidas.
-        return Http::acceptJson()->timeout(10)->get($url)->throw()->json();
+        $response = Http::get($url);
+
+        return $response->json();
     }
 }

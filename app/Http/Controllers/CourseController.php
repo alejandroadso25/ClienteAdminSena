@@ -9,40 +9,47 @@ use Illuminate\View\View;
 
 class CourseController extends Controller
 {
-    // La vista Blade presenta los datos obtenidos desde el endpoint de cursos del backend.
+    // Consultar los cursos:
     public function index(): View
     {
-        // URL_SERVER_API permite cambiar la API; por defecto se consulta AdminSena v1.
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
-        $courses = collect($this->fetchDataFromApi($url . '/courses'));
-
-        return view('Course.index', ['courses' => $courses, 'showForm' => false]);
-    }
-
-    public function create(): View
-    {
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+        $courses = $this->fetchDataFromApi($url.'/courses');
 
         return view('Course.index', [
-            'courses' => collect($this->fetchDataFromApi($url . '/courses')),
-            'areas' => collect($this->fetchDataFromApi($url . '/areas')),
-            'trainingCenters' => collect($this->fetchDataFromApi($url . '/training-centers')),
+            'courses' => $courses,
+            'showForm' => false,
+        ]);
+    }
+
+    // Mostrar el formulario de creación de cursos:
+    public function create(): View
+    {
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+
+        return view('Course.index', [
+            'courses' => $this->fetchDataFromApi($url.'/courses'),
+            'areas' => $this->fetchDataFromApi($url.'/areas'),
+            'trainingCenters' => $this->fetchDataFromApi($url.'/training-centers'),
             'showForm' => true,
         ]);
     }
 
+    // Crear curso:
     public function store(Request $request): RedirectResponse
     {
-        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
-        // Solo se redirige al listado cuando la API confirma la creación sin error HTTP.
-        Http::acceptJson()->timeout(10)->post($url . '/courses', $request->all())->throw();
+        $url = env('URL_SERVER_API');
+        Http::post($url.'/courses', $request->all());
 
         return redirect()->route('courses.index');
     }
 
-    private function fetchDataFromApi(string $url): mixed
+    // Consultar a la API y devolver la respuesta en formato JSON:
+    private function fetchDataFromApi($url)
     {
-        // Devuelve el JSON del endpoint y lanza una excepción ante respuestas HTTP fallidas.
-        return Http::acceptJson()->timeout(10)->get($url)->throw()->json();
+        $response = Http::get($url);
+
+        return $response->json();
     }
 }
