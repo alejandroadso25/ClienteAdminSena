@@ -12,26 +12,37 @@ class CourseController extends Controller
     // La vista Blade presenta los datos obtenidos desde el endpoint de cursos del backend.
     public function index(): View
     {
-        $url = rtrim(config('services.adminsena_api.base_url'), '/') . '/courses';
-        $courses = collect(Http::acceptJson()->timeout(10)->get($url)->throw()->json());
+        // URL_SERVER_API permite cambiar la API; por defecto se consulta AdminSena v1.
+        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
+        $courses = collect($this->fetchDataFromApi($url . '/courses'));
 
         return view('Course.index', ['courses' => $courses, 'showForm' => false]);
     }
 
     public function create(): View
     {
-        $baseUrl = rtrim(config('services.adminsena_api.base_url'), '/');
+        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
 
         return view('Course.index', [
-            'courses' => collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/courses')->throw()->json()),
-            'areas' => collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/areas')->throw()->json()),
-            'trainingCenters' => collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/training-centers')->throw()->json()),
+            'courses' => collect($this->fetchDataFromApi($url . '/courses')),
+            'areas' => collect($this->fetchDataFromApi($url . '/areas')),
+            'trainingCenters' => collect($this->fetchDataFromApi($url . '/training-centers')),
             'showForm' => true,
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        return $this->createApiResource($request, 'courses', 'courses.index', 'Curso creado correctamente.');
+        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
+        // Solo se redirige al listado cuando la API confirma la creación sin error HTTP.
+        Http::acceptJson()->timeout(10)->post($url . '/courses', $request->all())->throw();
+
+        return redirect()->route('courses.index');
+    }
+
+    private function fetchDataFromApi(string $url): mixed
+    {
+        // Devuelve el JSON del endpoint y lanza una excepción ante respuestas HTTP fallidas.
+        return Http::acceptJson()->timeout(10)->get($url)->throw()->json();
     }
 }

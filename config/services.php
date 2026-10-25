@@ -14,17 +14,6 @@ return [
     |
     */
 
-
-    'adminsena_api' => [
-        // SERVER_API apunta a la raíz del backend; la versión se añade aquí una sola vez.
-        'base_url' => rtrim(env('SERVER_API', env('URL_SERVER_API', 'http://api.adminsena.test')), '/') . '/v1',
-        'storage_url' => env(
-            'API_STORAGE_URL',
-            rtrim(env('SERVER_API', env('URL_SERVER_API', 'http://api.adminsena.test')), '/') . '/storage'
-        ),
-    ],
-    
-    
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),

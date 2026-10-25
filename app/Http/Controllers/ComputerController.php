@@ -22,17 +22,27 @@ class ComputerController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        return $this->createApiResource($request, 'computers', 'computers.index', 'Computador creado correctamente.');
+        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
+        // Solo se redirige al listado cuando la API confirma la creación sin error HTTP.
+        Http::acceptJson()->timeout(10)->post($url . '/computers', $request->all())->throw();
+
+        return redirect()->route('computers.index');
     }
 
     private function listing(bool $showForm = false): View
     {
         // La creación reutiliza el listado para mantener juntos el formulario y la tabla.
-        $url = rtrim(config('services.adminsena_api.base_url'), '/') . '/computers';
+        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
 
         return view('Computer.index', [
-            'computers' => collect(Http::acceptJson()->timeout(10)->get($url)->throw()->json()),
+            'computers' => collect($this->fetchDataFromApi($url . '/computers')),
             'showForm' => $showForm,
         ]);
+    }
+
+    private function fetchDataFromApi(string $url): mixed
+    {
+        // Devuelve el JSON del endpoint y lanza una excepción ante respuestas HTTP fallidas.
+        return Http::acceptJson()->timeout(10)->get($url)->throw()->json();
     }
 }

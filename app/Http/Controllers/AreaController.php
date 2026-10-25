@@ -22,17 +22,27 @@ class AreaController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        return $this->createApiResource($request, 'areas', 'areas.index', 'Área creada correctamente.');
+        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
+        // Solo se redirige al listado cuando la API confirma la creación sin error HTTP.
+        Http::acceptJson()->timeout(10)->post($url . '/areas', $request->all())->throw();
+
+        return redirect()->route('areas.index');
     }
 
     private function listing(bool $showForm = false): View
     {
         // La creación reutiliza el listado para mantener juntos el formulario y la tabla.
-        $url = rtrim(config('services.adminsena_api.base_url'), '/') . '/areas';
+        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
 
         return view('Area.index', [
-            'areas' => collect(Http::acceptJson()->timeout(10)->get($url)->throw()->json()),
+            'areas' => collect($this->fetchDataFromApi($url . '/areas')),
             'showForm' => $showForm,
         ]);
+    }
+
+    private function fetchDataFromApi(string $url): mixed
+    {
+        // Devuelve el JSON del endpoint y lanza una excepción ante respuestas HTTP fallidas.
+        return Http::acceptJson()->timeout(10)->get($url)->throw()->json();
     }
 }

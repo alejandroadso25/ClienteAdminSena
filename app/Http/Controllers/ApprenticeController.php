@@ -11,29 +11,35 @@ class ApprenticeController extends Controller
 {
     public function index(): View
     {
-        $baseUrl = rtrim(config('services.adminsena_api.base_url'), '/');
-        $apprentices = collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/apprentices')->throw()->json());
+        // URL_SERVER_API permite cambiar la API; por defecto se consulta AdminSena v1.
+        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
+        $apprentices = collect($this->fetchDataFromApi($url . '/apprentices'));
 
         return view('Apprentice.index', compact('apprentices'));
     }
 
     public function create(): View
     {
-        $baseUrl = rtrim(config('services.adminsena_api.base_url'), '/');
+        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
 
         return view('Apprentice.create', [
-            'courses' => collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/courses')->throw()->json()),
-            'computers' => collect(Http::acceptJson()->timeout(10)->get($baseUrl . '/computers')->throw()->json()),
+            'courses' => collect($this->fetchDataFromApi($url . '/courses')),
+            'computers' => collect($this->fetchDataFromApi($url . '/computers')),
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        return $this->createApiResource(
-            $request,
-            'apprentices',
-            'apprentices.index',
-            'Aprendiz creado correctamente.'
-        );
+        $url = env('URL_SERVER_API', 'http://api.adminsena.test/v1');
+        // El error HTTP se propaga para no redirigir como si el registro se hubiera creado.
+        Http::acceptJson()->timeout(10)->post($url . '/apprentices', $request->all())->throw();
+
+        return redirect()->route('apprentices.index');
+    }
+
+    private function fetchDataFromApi(string $url): mixed
+    {
+        // Devuelve el JSON del endpoint y lanza una excepción ante respuestas HTTP fallidas.
+        return Http::acceptJson()->timeout(10)->get($url)->throw()->json();
     }
 }
