@@ -19,6 +19,7 @@ class CourseController extends Controller
         return view('Courses.index', [
             'courses' => $courses,
             'showForm' => false,
+            'storageUrl' => $this->apiStorageUrl($url),
         ]);
     }
 
@@ -40,7 +41,9 @@ class CourseController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $url = env('URL_SERVER_API');
-        Http::post($url.'/courses', $request->all());
+        $this->sendRequestWithImages($request, $url.'/courses', 'POST', [
+            'images' => true,
+        ], $url.'/images', 'App\\Models\\Course');
 
         return redirect()->route('courses.index');
     }
@@ -72,7 +75,9 @@ class CourseController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $url = env('URL_SERVER_API');
-        Http::put($url.'/courses/'.$id, $request->all());
+        $this->sendRequestWithImages($request, $url.'/courses/'.$id, 'PUT', [
+            'images' => true,
+        ], $url.'/images', 'App\\Models\\Course');
 
         return redirect()->route('courses.index');
     }

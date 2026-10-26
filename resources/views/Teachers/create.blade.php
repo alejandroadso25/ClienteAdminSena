@@ -17,7 +17,7 @@
             </div>
         @endif
         {{-- El formulario conserva los datos de instructor y relaciones existentes en el módulo. --}}
-        <form method="POST" action="{{ route('teachers.store') }}">
+        <form method="POST" action="{{ route('teachers.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label class="form-label" for="teacher-name">Nombre</label>
@@ -26,6 +26,10 @@
             <div class="mb-3">
                 <label class="form-label" for="teacher-email">Correo</label>
                 <input class="form-control" id="teacher-email" name="email" type="email" value="{{ old('email') }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="teacher-image">Imagen</label>
+                <input class="form-control" id="teacher-image" name="image" type="file" accept="image/*">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="teacher-area">Área</label>

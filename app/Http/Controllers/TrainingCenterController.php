@@ -19,6 +19,7 @@ class TrainingCenterController extends Controller
         return view('TrainingCenters.index', [
             'trainingCenters' => $trainingCenters,
             'showForm' => false,
+            'storageUrl' => $this->apiStorageUrl($url),
         ]);
     }
 
@@ -39,7 +40,9 @@ class TrainingCenterController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $url = env('URL_SERVER_API');
-        Http::post($url.'/training-centers', $request->all());
+        $this->sendRequestWithImages($request, $url.'/training-centers', 'POST', [
+            'image' => false,
+        ], $url.'/images', 'App\\Models\\Training_Center');
 
         return redirect()->route('training-centers.index');
     }
@@ -68,7 +71,9 @@ class TrainingCenterController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $url = env('URL_SERVER_API');
-        Http::put($url.'/training-centers/'.$id, $request->all());
+        $this->sendRequestWithImages($request, $url.'/training-centers/'.$id, 'PUT', [
+            'image' => false,
+        ], $url.'/images', 'App\\Models\\Training_Center');
 
         return redirect()->route('training-centers.index');
     }

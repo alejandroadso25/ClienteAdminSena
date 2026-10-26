@@ -22,7 +22,7 @@
         @endif
 
         {{-- El formulario reutiliza los campos de creación y envía los cambios mediante PUT. --}}
-        <form class="page" method="POST" action="{{ route('apprentices.update', $apprentice['id']) }}">
+        <form class="page" method="POST" action="{{ route('apprentices.update', $apprentice['id']) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="form-grid">
@@ -37,6 +37,10 @@
                 <label class="form-field" for="apprentice-cell-number">
                     <span>Celular</span>
                     <input id="apprentice-cell-number" name="cell_number" type="text" value="{{ old('cell_number', $apprentice['cell_number'] ?? '') }}" maxlength="255">
+                </label>
+                <label class="form-field" for="apprentice-image">
+                    <span>Reemplazar imagen (opcional)</span>
+                    <input id="apprentice-image" name="image" type="file" accept="image/*">
                 </label>
                 <label class="form-field" for="apprentice-course">
                     <span>Curso</span>

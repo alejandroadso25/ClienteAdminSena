@@ -16,7 +16,7 @@
                 @foreach ($errors->all() as $error)<div>{{ $error }}</div>@endforeach
             </div>
         @endif
-        <form method="POST" action="{{ route('training-centers.update', $trainingCenter['id']) }}">
+        <form method="POST" action="{{ route('training-centers.update', $trainingCenter['id']) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="mb-3">
@@ -26,6 +26,10 @@
             <div class="mb-3">
                 <label class="form-label" for="training-center-location">Ubicación</label>
                 <input class="form-control" id="training-center-location" name="location" value="{{ old('location', $trainingCenter['location'] ?? '') }}" maxlength="255">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="training-center-image">Reemplazar imagen (opcional)</label>
+                <input class="form-control" id="training-center-image" name="image" type="file" accept="image/*">
             </div>
             <button class="btn btn-primary" type="submit">Guardar cambios</button>
             <a class="btn btn-outline-secondary" href="{{ route('training-centers.index') }}">Cancelar</a>

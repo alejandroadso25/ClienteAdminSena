@@ -21,7 +21,7 @@
             </div>
         @endif
         {{-- El formulario crea mediante POST y deja la validación del recurso al backend. --}}
-        <form class="page" method="POST" action="{{ route('apprentices.store') }}">
+        <form class="page" method="POST" action="{{ route('apprentices.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="form-grid">
                 <label class="form-field" for="apprentice-name">
@@ -35,6 +35,10 @@
                 <label class="form-field" for="apprentice-cell-number">
                     <span>Celular</span>
                     <input id="apprentice-cell-number" name="cell_number" type="text" value="{{ old('cell_number') }}" maxlength="255">
+                </label>
+                <label class="form-field" for="apprentice-image">
+                    <span>Imagen</span>
+                    <input id="apprentice-image" name="image" type="file" accept="image/*">
                 </label>
                 <label class="form-field" for="apprentice-course">
                     <span>Curso</span>
@@ -58,6 +62,8 @@
                     </select>
                 </label>
             </div>
+            {{-- El navegador no puede restaurar archivos elegidos si hay errores de validación. --}}
+            <p class="form-text">Formatos de imagen admitidos por el servidor.</p>
             <div class="modal-actions">
                 <button class="primary-button" type="submit">Crear aprendiz</button>
                 <a class="secondary-button" href="{{ route('apprentices.index') }}">Cancelar</a>

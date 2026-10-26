@@ -19,6 +19,7 @@ class TeacherController extends Controller
         return view('Teachers.index', [
             'teachers' => $teachers,
             'showForm' => false,
+            'storageUrl' => $this->apiStorageUrl($url),
         ]);
     }
 
@@ -40,7 +41,9 @@ class TeacherController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $url = env('URL_SERVER_API');
-        Http::post($url.'/teachers', $request->all());
+        $this->sendRequestWithImages($request, $url.'/teachers', 'POST', [
+            'image' => false,
+        ], $url.'/images', 'App\\Models\\Teacher');
 
         return redirect()->route('teachers.index');
     }
@@ -72,7 +75,9 @@ class TeacherController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $url = env('URL_SERVER_API');
-        Http::put($url.'/teachers/'.$id, $request->all());
+        $this->sendRequestWithImages($request, $url.'/teachers/'.$id, 'PUT', [
+            'image' => false,
+        ], $url.'/images', 'App\\Models\\Teacher');
 
         return redirect()->route('teachers.index');
     }

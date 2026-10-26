@@ -16,7 +16,7 @@
                 @foreach ($errors->all() as $error)<div>{{ $error }}</div>@endforeach
             </div>
         @endif
-        <form method="POST" action="{{ route('courses.update', $course['id']) }}">
+        <form method="POST" action="{{ route('courses.update', $course['id']) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="mb-3">
@@ -44,6 +44,10 @@
                         <option value="{{ $trainingCenter['id'] }}" @selected((string) old('training_center_id', data_get($course, 'training_center_id', data_get($course, 'training_center.id'))) === (string) $trainingCenter['id'])>{{ $trainingCenter['name'] }}</option>
                     @endforeach
                 </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="course-images">Agregar imágenes del curso (opcional)</label>
+                <input class="form-control" id="course-images" name="images[]" type="file" accept="image/*" multiple>
             </div>
             <button class="btn btn-primary" type="submit">Guardar cambios</button>
             <a class="btn btn-outline-secondary" href="{{ route('courses.index') }}">Cancelar</a>

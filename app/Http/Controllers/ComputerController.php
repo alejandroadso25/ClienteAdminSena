@@ -39,7 +39,9 @@ class ComputerController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $url = env('URL_SERVER_API');
-        Http::post($url.'/computers', $request->all());
+        $this->sendRequestWithImages($request, $url.'/computers', 'POST', [
+            'image' => false,
+        ], $url.'/images', 'App\\Models\\Computer');
 
         return redirect()->route('computers.index');
     }
@@ -68,7 +70,9 @@ class ComputerController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         $url = env('URL_SERVER_API');
-        Http::put($url.'/computers/'.$id, $request->all());
+        $this->sendRequestWithImages($request, $url.'/computers/'.$id, 'PUT', [
+            'image' => false,
+        ], $url.'/images', 'App\\Models\\Computer');
 
         return redirect()->route('computers.index');
     }

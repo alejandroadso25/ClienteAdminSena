@@ -17,7 +17,7 @@
             </div>
         @endif
         {{-- El formulario usa los campos de curso y las relaciones ya cargadas por el controlador. --}}
-        <form method="POST" action="{{ route('courses.store') }}">
+        <form method="POST" action="{{ route('courses.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label class="form-label" for="course-number">Número de ficha</label>
@@ -44,6 +44,10 @@
                         <option value="{{ $trainingCenter['id'] }}" @selected((string) old('training_center_id') === (string) $trainingCenter['id'])>{{ $trainingCenter['name'] }}</option>
                     @endforeach
                 </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="course-images">Imágenes del curso</label>
+                <input class="form-control" id="course-images" name="images[]" type="file" accept="image/*" multiple>
             </div>
             <button class="btn btn-primary" type="submit">Crear curso</button>
             <a class="btn btn-outline-secondary" href="{{ route('courses.index') }}">Cancelar</a>

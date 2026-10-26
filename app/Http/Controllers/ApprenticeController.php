@@ -15,7 +15,10 @@ class ApprenticeController extends Controller
         $url = env('URL_SERVER_API');
         $apprentices = $this->fetchDataFromApi($url.'/apprentices');
 
-        return view('Apprentices.index', compact('apprentices'));
+        return view('Apprentices.index', [
+            'apprentices' => $apprentices,
+            'storageUrl' => $this->apiStorageUrl($url),
+        ]);
     }
 
     // Mostrar el formulario de creación de aprendices:
@@ -34,7 +37,9 @@ class ApprenticeController extends Controller
     public function store(Request $request)
     {
         $url = env('URL_SERVER_API');
-        Http::post($url.'/apprentices', $request->all());
+        $this->sendRequestWithImages($request, $url.'/apprentices', 'POST', [
+            'image' => false,
+        ], $url.'/images', 'App\\Models\\Apprentice');
 
         return redirect()->route('apprentices.index');
     }
@@ -66,7 +71,9 @@ class ApprenticeController extends Controller
     public function update(Request $request, $id)
     {
         $url = env('URL_SERVER_API');
-        Http::put($url.'/apprentices/'.$id, $request->all());
+        $this->sendRequestWithImages($request, $url.'/apprentices/'.$id, 'PUT', [
+            'image' => false,
+        ], $url.'/images', 'App\\Models\\Apprentice');
 
         return redirect()->route('apprentices.index');
     }

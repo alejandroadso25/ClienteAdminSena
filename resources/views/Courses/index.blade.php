@@ -82,7 +82,7 @@
                         <tr>
                             <td>
                                 @forelse (collect(data_get($course, 'images', []))->filter(fn ($image) => data_get($image, 'path')) as $courseImage)
-                                    <img class="record-thumbnail" src="{{ rtrim(config('services.adminsena_api.storage_url'), '/') . '/' . ltrim(data_get($courseImage, 'path'), '/') }}" alt="{{ data_get($courseImage, 'alt_text', 'Curso ' . data_get($course, 'course_number', '')) }}" loading="lazy">
+                                    <img class="record-thumbnail" src="{{ rtrim($storageUrl, '/') . '/' . ltrim(data_get($courseImage, 'path'), '/') }}" alt="{{ data_get($courseImage, 'alt_text', 'Curso ' . data_get($course, 'course_number', '')) }}" loading="lazy">
                                 @empty
                                     <span class="image-unavailable">Sin imagen</span>
                                 @endforelse

@@ -63,7 +63,7 @@
                         <tr>
                             <td>
                                 @if (data_get($trainingCenter, 'image.path'))
-                                    <img class="record-thumbnail" src="{{ rtrim(config('services.adminsena_api.storage_url'), '/') . '/' . ltrim(data_get($trainingCenter, 'image.path'), '/') }}" alt="{{ data_get($trainingCenter, 'image.alt_text', 'Centro ' . data_get($trainingCenter, 'name', '')) }}" loading="lazy">
+                                    <img class="record-thumbnail" src="{{ rtrim($storageUrl, '/') . '/' . ltrim(data_get($trainingCenter, 'image.path'), '/') }}" alt="{{ data_get($trainingCenter, 'image.alt_text', 'Centro ' . data_get($trainingCenter, 'name', '')) }}" loading="lazy">
                                 @else
                                     <span class="image-unavailable">Sin imagen</span>
                                 @endif

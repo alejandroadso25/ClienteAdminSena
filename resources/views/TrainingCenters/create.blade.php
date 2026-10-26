@@ -17,7 +17,7 @@
             </div>
         @endif
         {{-- El formulario conserva los campos de centro usados por el módulo actual. --}}
-        <form method="POST" action="{{ route('training-centers.store') }}">
+        <form method="POST" action="{{ route('training-centers.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label class="form-label" for="training-center-name">Nombre</label>
@@ -26,6 +26,10 @@
             <div class="mb-3">
                 <label class="form-label" for="training-center-location">Ubicación</label>
                 <input class="form-control" id="training-center-location" name="location" value="{{ old('location') }}" maxlength="255">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="training-center-image">Imagen</label>
+                <input class="form-control" id="training-center-image" name="image" type="file" accept="image/*">
             </div>
             <button class="btn btn-primary" type="submit">Crear centro</button>
             <a class="btn btn-outline-secondary" href="{{ route('training-centers.index') }}">Cancelar</a>

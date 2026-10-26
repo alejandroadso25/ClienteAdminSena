@@ -37,7 +37,7 @@
                         <tr>
                             <td>
                                 @if (data_get($apprentice, 'image.path'))
-                                    <img class="img-thumbnail" style="width: 4rem; height: 4rem; object-fit: cover;" src="{{ rtrim(config('services.adminsena_api.storage_url'), '/') . '/' . ltrim(data_get($apprentice, 'image.path'), '/') }}" alt="{{ data_get($apprentice, 'image.alt_text', 'Aprendiz ' . data_get($apprentice, 'name', '')) }}" loading="lazy">
+                                    <img class="img-thumbnail" style="width: 4rem; height: 4rem; object-fit: cover;" src="{{ rtrim($storageUrl, '/') . '/' . ltrim(data_get($apprentice, 'image.path'), '/') }}" alt="{{ data_get($apprentice, 'image.alt_text', 'Aprendiz ' . data_get($apprentice, 'name', '')) }}" loading="lazy">
                                 @else
                                     <span class="text-secondary">Sin imagen</span>
                                 @endif

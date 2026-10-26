@@ -82,7 +82,7 @@
                         <tr>
                             <td>
                                 @if (data_get($teacher, 'image.path'))
-                                    <img class="record-thumbnail" src="{{ rtrim(config('services.adminsena_api.storage_url'), '/') . '/' . ltrim(data_get($teacher, 'image.path'), '/') }}" alt="{{ data_get($teacher, 'image.alt_text', 'Instructor ' . data_get($teacher, 'name', '')) }}" loading="lazy">
+                                    <img class="record-thumbnail" src="{{ rtrim($storageUrl, '/') . '/' . ltrim(data_get($teacher, 'image.path'), '/') }}" alt="{{ data_get($teacher, 'image.alt_text', 'Instructor ' . data_get($teacher, 'name', '')) }}" loading="lazy">
                                 @else
                                     <span class="image-unavailable">Sin imagen</span>
                                 @endif
