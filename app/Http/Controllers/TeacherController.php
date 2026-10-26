@@ -28,7 +28,7 @@ class TeacherController extends Controller
         // Variable de SERVER API:
         $url = env('URL_SERVER_API');
 
-        return view('Teachers.index', [
+        return view('Teachers.create', [
             'teachers' => $this->fetchDataFromApi($url.'/teachers'),
             'areas' => $this->fetchDataFromApi($url.'/areas'),
             'trainingCenters' => $this->fetchDataFromApi($url.'/training-centers'),

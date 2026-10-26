@@ -49,15 +49,29 @@
                 <thead>
                     <tr>
                         <th scope="col">Nombre</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($areas as $area)
                         <tr>
                             <td>{{ $area['name'] ?? '' }}</td>
+                            <td>
+                                @if (!empty($area['id']))
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a class="btn btn-sm btn-outline-primary" href="{{ route('areas.show', $area['id']) }}">Ver</a>
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('areas.edit', $area['id']) }}">Editar</a>
+                                        <form method="POST" action="{{ route('areas.destroy', $area['id']) }}" onsubmit="return confirm('¿Eliminar esta área?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Eliminar</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </td>
                         </tr>
                     @empty
-                        <tr><td>No hay registros disponibles.</td></tr>
+                        <tr><td colspan="2">No hay registros disponibles.</td></tr>
                     @endforelse
                 </tbody>
             </table>

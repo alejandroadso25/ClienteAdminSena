@@ -65,6 +65,7 @@
                     <tr>
                         <th scope="col">Curso</th>
                         <th scope="col">Instructor</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,9 +73,22 @@
                         <tr>
                             <td>{{ data_get($courseTeacher, 'course.program_name') }}</td>
                             <td>{{ data_get($courseTeacher, 'teacher.name') }}</td>
+                            <td>
+                                @if (!empty($courseTeacher['id']))
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a class="btn btn-sm btn-outline-primary" href="{{ route('course-teachers.show', $courseTeacher['id']) }}">Ver</a>
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('course-teachers.edit', $courseTeacher['id']) }}">Editar</a>
+                                        <form method="POST" action="{{ route('course-teachers.destroy', $courseTeacher['id']) }}" onsubmit="return confirm('¿Eliminar esta asignación?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Eliminar</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </td>
                         </tr>
                     @empty
-                        <tr><td colspan="2">No hay registros disponibles.</td></tr>
+                        <tr><td colspan="3">No hay registros disponibles.</td></tr>
                     @endforelse
                 </tbody>
             </table>

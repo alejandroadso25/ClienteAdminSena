@@ -55,6 +55,7 @@
                         <th scope="col">Imagen</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Ubicación</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,9 +70,22 @@
                             </td>
                             <td>{{ $trainingCenter['name'] ?? '' }}</td>
                             <td>{{ $trainingCenter['location'] ?? '' }}</td>
+                            <td>
+                                @if (!empty($trainingCenter['id']))
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a class="btn btn-sm btn-outline-primary" href="{{ route('training-centers.show', $trainingCenter['id']) }}">Ver</a>
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('training-centers.edit', $trainingCenter['id']) }}">Editar</a>
+                                        <form method="POST" action="{{ route('training-centers.destroy', $trainingCenter['id']) }}" onsubmit="return confirm('¿Eliminar este centro de formación?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Eliminar</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </td>
                         </tr>
                     @empty
-                        <tr><td colspan="3">No hay registros disponibles.</td></tr>
+                        <tr><td colspan="4">No hay registros disponibles.</td></tr>
                     @endforelse
                 </tbody>
             </table>

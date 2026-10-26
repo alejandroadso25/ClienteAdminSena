@@ -55,6 +55,7 @@
                         <th scope="col">Imagen</th>
                         <th scope="col">Número</th>
                         <th scope="col">Marca</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,9 +70,22 @@
                             </td>
                             <td>{{ $computer['number'] ?? '' }}</td>
                             <td>{{ $computer['brand'] ?? '' }}</td>
+                            <td>
+                                @if (!empty($computer['id']))
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a class="btn btn-sm btn-outline-primary" href="{{ route('computers.show', $computer['id']) }}">Ver</a>
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('computers.edit', $computer['id']) }}">Editar</a>
+                                        <form method="POST" action="{{ route('computers.destroy', $computer['id']) }}" onsubmit="return confirm('¿Eliminar este computador?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Eliminar</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </td>
                         </tr>
                     @empty
-                        <tr><td colspan="3">No hay registros disponibles.</td></tr>
+                        <tr><td colspan="4">No hay registros disponibles.</td></tr>
                     @endforelse
                 </tbody>
             </table>

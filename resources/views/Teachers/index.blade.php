@@ -74,6 +74,7 @@
                         <th scope="col">Imagen</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Correo</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,9 +89,22 @@
                             </td>
                             <td>{{ $teacher['name'] ?? '' }}</td>
                             <td>{{ $teacher['email'] ?? '' }}</td>
+                            <td>
+                                @if (!empty($teacher['id']))
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a class="btn btn-sm btn-outline-primary" href="{{ route('teachers.show', $teacher['id']) }}">Ver</a>
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('teachers.edit', $teacher['id']) }}">Editar</a>
+                                        <form method="POST" action="{{ route('teachers.destroy', $teacher['id']) }}" onsubmit="return confirm('¿Eliminar este instructor?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Eliminar</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </td>
                         </tr>
                     @empty
-                        <tr><td colspan="3">No hay registros disponibles.</td></tr>
+                        <tr><td colspan="4">No hay registros disponibles.</td></tr>
                     @endforelse
                 </tbody>
             </table>

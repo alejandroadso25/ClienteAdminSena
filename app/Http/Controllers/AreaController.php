@@ -29,7 +29,7 @@ class AreaController extends Controller
         $url = env('URL_SERVER_API');
         $areas = $this->fetchDataFromApi($url.'/areas');
 
-        return view('Areas.index', [
+        return view('Areas.create', [
             'areas' => $areas,
             'showForm' => true,
         ]);
