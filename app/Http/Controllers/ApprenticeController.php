@@ -39,6 +39,47 @@ class ApprenticeController extends Controller
         return redirect()->route('apprentices.index');
     }
 
+    // Consultar un aprendiz específico:
+    public function show($id): View
+    {
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+        $apprentice = $this->fetchDataFromApi($url.'/apprentices/'.$id);
+
+        return view('Apprentices.show', compact('apprentice'));
+    }
+
+    // Mostrar el formulario para editar un aprendiz específico:
+    public function edit($id): View
+    {
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+
+        return view('Apprentices.edit', [
+            'apprentice' => $this->fetchDataFromApi($url.'/apprentices/'.$id),
+            'courses' => $this->fetchDataFromApi($url.'/courses'),
+            'computers' => $this->fetchDataFromApi($url.'/computers'),
+        ]);
+    }
+
+    // Actualizar aprendiz:
+    public function update(Request $request, $id)
+    {
+        $url = env('URL_SERVER_API');
+        Http::put($url.'/apprentices/'.$id, $request->all());
+
+        return redirect()->route('apprentices.index');
+    }
+
+    // Eliminar aprendiz:
+    public function destroy($id)
+    {
+        $url = env('URL_SERVER_API');
+        Http::delete($url.'/apprentices/'.$id);
+
+        return redirect()->route('apprentices.index');
+    }
+
     // Consultar a la API y devolver la respuesta en formato JSON:
     private function fetchDataFromApi($url)
     {

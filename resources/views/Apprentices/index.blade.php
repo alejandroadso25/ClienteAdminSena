@@ -29,6 +29,7 @@
                         <th scope="col">Nombre</th>
                         <th scope="col">Correo</th>
                         <th scope="col">Celular</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,9 +45,22 @@
                             <td>{{ $apprentice['name'] ?? '' }}</td>
                             <td>{{ $apprentice['email'] ?? '' }}</td>
                             <td>{{ $apprentice['cell_number'] ?? '' }}</td>
+                            <td>
+                                @if (!empty($apprentice['id']))
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a class="btn btn-sm btn-outline-primary" href="{{ route('apprentices.show', $apprentice['id']) }}">Ver</a>
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('apprentices.edit', $apprentice['id']) }}">Editar</a>
+                                        <form method="POST" action="{{ route('apprentices.destroy', $apprentice['id']) }}" onsubmit="return confirm('¿Eliminar este aprendiz?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Eliminar</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </td>
                         </tr>
                     @empty
-                        <tr><td colspan="4" class="text-center text-secondary py-4">No hay registros disponibles.</td></tr>
+                        <tr><td colspan="5" class="text-center text-secondary py-4">No hay registros disponibles.</td></tr>
                     @endforelse
                 </tbody>
             </table>

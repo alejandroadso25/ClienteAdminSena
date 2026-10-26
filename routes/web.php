@@ -12,10 +12,14 @@ use Illuminate\Support\Facades\Route;
 // Página pública de inicio; solo renderiza la vista Blade.
 Route::view('/', 'welcome')->name('home');
 
-// Aprendices: GET muestra el listado o formulario; POST envía la creación al API central.
+// Aprendices: las rutas muestran, crean, consultan, actualizan y eliminan registros en el API central.
 Route::get('apprentices', [ApprenticeController::class, 'index'])->name('apprentices.index');
 Route::get('apprentices/create', [ApprenticeController::class, 'create'])->name('apprentices.create');
 Route::post('apprentices', [ApprenticeController::class, 'store'])->name('apprentices.store');
+Route::get('apprentices/{id}', [ApprenticeController::class, 'show'])->name('apprentices.show');
+Route::get('apprentices/{id}/edit', [ApprenticeController::class, 'edit'])->name('apprentices.edit');
+Route::put('apprentices/{id}', [ApprenticeController::class, 'update'])->name('apprentices.update');
+Route::delete('apprentices/{id}', [ApprenticeController::class, 'destroy'])->name('apprentices.destroy');
 
 // Áreas: GET muestra el listado o formulario; POST crea el registro en el API central.
 Route::get('areas', [AreaController::class, 'index'])->name('areas.index');

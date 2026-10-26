@@ -44,6 +44,44 @@ class ComputerController extends Controller
         return redirect()->route('computers.index');
     }
 
+    // Consultar un computador específico:
+    public function show($id): View
+    {
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+        $computer = $this->fetchDataFromApi($url.'/computers/'.$id);
+
+        return view('Computers.show', compact('computer'));
+    }
+
+    // Mostrar el formulario para editar un computador específico:
+    public function edit($id): View
+    {
+        // Variable de SERVER API:
+        $url = env('URL_SERVER_API');
+        $computer = $this->fetchDataFromApi($url.'/computers/'.$id);
+
+        return view('Computers.edit', compact('computer'));
+    }
+
+    // Actualizar computador:
+    public function update(Request $request, $id): RedirectResponse
+    {
+        $url = env('URL_SERVER_API');
+        Http::put($url.'/computers/'.$id, $request->all());
+
+        return redirect()->route('computers.index');
+    }
+
+    // Eliminar computador:
+    public function destroy($id): RedirectResponse
+    {
+        $url = env('URL_SERVER_API');
+        Http::delete($url.'/computers/'.$id);
+
+        return redirect()->route('computers.index');
+    }
+
     // Consultar a la API y devolver la respuesta en formato JSON:
     private function fetchDataFromApi($url)
     {
