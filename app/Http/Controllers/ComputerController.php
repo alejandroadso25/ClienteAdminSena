@@ -19,6 +19,7 @@ class ComputerController extends Controller
         return view('Computers.index', [
             'computers' => $computers,
             'showForm' => false,
+            'storageUrl' => $this->apiStorageUrl($url),
         ]);
     }
 

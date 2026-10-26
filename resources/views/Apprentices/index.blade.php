@@ -21,6 +21,7 @@
         </div>
 
         {{-- El listado usa los aprendices que el controlador consulta en el API central. --}}
+        {{-- Bootstrap aplica estilos y permite desplazar la tabla en pantallas estrechas. --}}
         <div class="table-responsive">
             <table class="table table-striped table-hover align-middle">
                 <thead>

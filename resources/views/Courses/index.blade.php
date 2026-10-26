@@ -3,24 +3,24 @@
 @section('title', 'Cursos | AdminSena')
 
 @section('content')
-    <section class="resource-page container" aria-labelledby="catalog-title">
-        <div class="page-heading">
+    <section class="container py-4" aria-labelledby="catalog-title">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
-                <p class="eyebrow">REGISTROS</p>
-                <h1 id="catalog-title">Cursos</h1>
-                <p>Cursos registrados en el sistema.</p>
+                <p class="text-uppercase text-secondary mb-1">Registros</p>
+                <h1 id="catalog-title" class="mb-2">Cursos</h1>
+                <p class="text-secondary mb-0">Cursos registrados en el sistema.</p>
             </div>
-            <div class="modal-actions">
-                <a class="primary-button" href="{{ route('courses.create') }}">Nuevo curso</a>
-                <a class="secondary-button" href="{{ url('/') }}">Volver al inicio</a>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary" href="{{ route('courses.create') }}">Nuevo curso</a>
+                <a class="btn btn-outline-secondary" href="{{ url('/') }}">Volver al inicio</a>
             </div>
         </div>
 
         @if (session('status'))
-            <p class="success-message" role="status">{{ session('status') }}</p>
+            <p class="alert alert-success" role="status">{{ session('status') }}</p>
         @endif
         @if ($errors->any())
-            <div class="error-message" role="alert">
+            <div class="alert alert-danger" role="alert">
                 @foreach ($errors->all() as $error)
                     <p>{{ $error }}</p>
                 @endforeach
@@ -67,9 +67,10 @@
         @endif
 
         {{-- El controlador entrega a esta vista la colección de cursos consultada en el API. --}}
-        <div class="table-wrapper">
-            <table>
-                <thead>
+        {{-- Bootstrap aplica estilos y permite desplazar la tabla en pantallas estrechas. --}}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-light">
                     <tr>
                         <th scope="col">Imágenes</th>
                         <th scope="col">Programa / ficha</th>
@@ -82,9 +83,9 @@
                         <tr>
                             <td>
                                 @forelse (collect(data_get($course, 'images', []))->filter(fn ($image) => data_get($image, 'path')) as $courseImage)
-                                    <img class="record-thumbnail" src="{{ rtrim($storageUrl, '/') . '/' . ltrim(data_get($courseImage, 'path'), '/') }}" alt="{{ data_get($courseImage, 'alt_text', 'Curso ' . data_get($course, 'course_number', '')) }}" loading="lazy">
+                                    <img class="img-thumbnail me-1 mb-1" style="width: 4rem; height: 4rem; object-fit: cover;" src="{{ rtrim($storageUrl, '/') . '/' . ltrim(data_get($courseImage, 'path'), '/') }}" alt="{{ data_get($courseImage, 'alt_text', 'Curso ' . data_get($course, 'course_number', '')) }}" loading="lazy">
                                 @empty
-                                    <span class="image-unavailable">Sin imagen</span>
+                                    <span class="text-secondary">Sin imagen</span>
                                 @endforelse
                             </td>
                             <td>{{ data_get($course, 'program_name') ?: data_get($course, 'course_number', 'Sin nombre') }}</td>

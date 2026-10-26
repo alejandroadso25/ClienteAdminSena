@@ -37,46 +37,56 @@
 
     {{-- La navegación cambia según se visite una tabla administrativa o una página pública. --}}
     @if ($isAdminSection)
-        <div class="admin-shell">
-            <header class="admin-navbar">
-                <a class="admin-brand" href="{{ route('home') }}" aria-label="Ir al inicio de AdminSena">
-                    <span class="admin-brand-mark sena-logo" role="img" aria-label="Logo SENA"></span>
-                </a>
-                <a class="admin-home-link" href="{{ route('home') }}">Ir al inicio</a>
+        <div class="min-vh-100 bg-light">
+            <header class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+                <div class="container-fluid">
+                    <a class="navbar-brand fw-bold" href="{{ route('home') }}">AdminSena</a>
+                    <button
+                        class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#adminNavigation"
+                        aria-controls="adminNavigation"
+                        aria-expanded="false"
+                        aria-label="Abrir menú">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                <nav class="nav-links" aria-label="Navegación de registros">
-                    <div class="nav-dropdown">
-                        <details>
-                            <summary>Tablas</summary>
-                            <div class="nav-submenu">
-                                @foreach ($tableLinks as $tableLink)
-                                    <a href="{{ route($tableLink['route']) }}">{{ $tableLink['label'] }}</a>
-                                @endforeach
+                    <nav class="collapse navbar-collapse" id="adminNavigation" aria-label="Navegación de registros">
+                        <div class="navbar-nav ms-auto">
+                            <a class="nav-link" href="{{ route('home') }}">Ir al inicio</a>
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tablas</a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    @foreach ($tableLinks as $tableLink)
+                                        <li><a class="dropdown-item" href="{{ route($tableLink['route']) }}">{{ $tableLink['label'] }}</a></li>
+                                    @endforeach
+                                </ul>
                             </div>
-                        </details>
-                    </div>
-                </nav>
+                        </div>
+                    </nav>
+                </div>
             </header>
 
-            <div class="content-shell">
-                <aside class="sidebar" aria-label="Menú de registros">
-                    <h2>Menú</h2>
-                    <ul>
+            <div class="container-fluid">
+                <div class="row">
+                    <aside class="col-12 col-lg-3 col-xl-2 bg-white border-end p-3" aria-label="Menú de registros">
+                    <h2 class="h5 mb-3">Menú</h2>
+                    <nav class="nav flex-column">
                         @foreach ($tableLinks as $tableLink)
-                            <li>
-                                <a
-                                    class="{{ request()->routeIs(str_replace('.index', '.*', $tableLink['route'])) ? 'active' : '' }}"
-                                    href="{{ route($tableLink['route']) }}">
-                                    {{ $tableLink['label'] }}
-                                </a>
-                            </li>
+                            <a
+                                class="nav-link rounded {{ request()->routeIs(str_replace('.index', '.*', $tableLink['route'])) ? 'active fw-semibold' : 'text-dark' }}"
+                                href="{{ route($tableLink['route']) }}">
+                                {{ $tableLink['label'] }}
+                            </a>
                         @endforeach
-                    </ul>
-                </aside>
+                    </nav>
+                    </aside>
 
-                <main class="main-content">
+                <main class="col-12 col-lg-9 col-xl-10 py-4 px-3 px-xl-4">
                     @yield('content')
                 </main>
+                </div>
             </div>
         </div>
     @else

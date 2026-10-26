@@ -3,26 +3,26 @@
 @section('title', 'Áreas | AdminSena')
 
 @section('content')
-    <section class="resource-page container" aria-labelledby="catalog-title">
+    <section class="container py-4" aria-labelledby="catalog-title">
         @if (session('status'))
-            <p class="success-message" role="status">{{ session('status') }}</p>
+            <p class="alert alert-success" role="status">{{ session('status') }}</p>
         @endif
         @if ($errors->any())
-            <div class="error-message" role="alert">
+            <div class="alert alert-danger" role="alert">
                 @foreach ($errors->all() as $error)
                     <p>{{ $error }}</p>
                 @endforeach
             </div>
         @endif
-        <div class="page-heading">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
-                <p class="eyebrow">REGISTROS</p>
-                <h1 id="catalog-title">Áreas</h1>
-                <p>Áreas de formación registradas.</p>
+                <p class="text-uppercase text-secondary mb-1">Registros</p>
+                <h1 id="catalog-title" class="mb-2">Áreas</h1>
+                <p class="text-secondary mb-0">Áreas de formación registradas.</p>
             </div>
-            <div class="modal-actions">
-                <a class="primary-button" href="{{ route('areas.create') }}">Nueva área</a>
-                <a class="secondary-button" href="{{ url('/') }}">Volver al inicio</a>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary" href="{{ route('areas.create') }}">Nueva área</a>
+                <a class="btn btn-outline-secondary" href="{{ url('/') }}">Volver al inicio</a>
             </div>
         </div>
 
@@ -44,9 +44,10 @@
         @endif
 
         {{-- La tabla presenta los registros recibidos desde el API por el controlador. --}}
-        <div class="table-wrapper">
-            <table>
-                <thead>
+        {{-- Bootstrap aplica estilos y permite desplazar la tabla en pantallas estrechas. --}}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-light">
                     <tr>
                         <th scope="col">Nombre</th>
                         <th scope="col">Acciones</th>

@@ -3,26 +3,26 @@
 @section('title', 'Centros de formación | AdminSena')
 
 @section('content')
-    <section class="resource-page container" aria-labelledby="catalog-title">
+    <section class="container py-4" aria-labelledby="catalog-title">
         @if (session('status'))
-            <p class="success-message" role="status">{{ session('status') }}</p>
+            <p class="alert alert-success" role="status">{{ session('status') }}</p>
         @endif
         @if ($errors->any())
-            <div class="error-message" role="alert">
+            <div class="alert alert-danger" role="alert">
                 @foreach ($errors->all() as $error)
                     <p>{{ $error }}</p>
                 @endforeach
             </div>
         @endif
-        <div class="page-heading">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
-                <p class="eyebrow">REGISTROS</p>
-                <h1 id="catalog-title">Centros de formación</h1>
-                <p>Centros de formación registrados.</p>
+                <p class="text-uppercase text-secondary mb-1">Registros</p>
+                <h1 id="catalog-title" class="mb-2">Centros de formación</h1>
+                <p class="text-secondary mb-0">Centros de formación registrados.</p>
             </div>
-            <div class="modal-actions">
-                <a class="primary-button" href="{{ route('training-centers.create') }}">Nuevo centro</a>
-                <a class="secondary-button" href="{{ url('/') }}">Volver al inicio</a>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary" href="{{ route('training-centers.create') }}">Nuevo centro</a>
+                <a class="btn btn-outline-secondary" href="{{ url('/') }}">Volver al inicio</a>
             </div>
         </div>
 
@@ -48,9 +48,10 @@
         @endif
 
         {{-- Las filas y sus imágenes se obtienen del API central. --}}
-        <div class="table-wrapper">
-            <table>
-                <thead>
+        {{-- Bootstrap aplica estilos y permite desplazar la tabla en pantallas estrechas. --}}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-light">
                     <tr>
                         <th scope="col">Imagen</th>
                         <th scope="col">Nombre</th>
@@ -63,9 +64,9 @@
                         <tr>
                             <td>
                                 @if (data_get($trainingCenter, 'image.path'))
-                                    <img class="record-thumbnail" src="{{ rtrim($storageUrl, '/') . '/' . ltrim(data_get($trainingCenter, 'image.path'), '/') }}" alt="{{ data_get($trainingCenter, 'image.alt_text', 'Centro ' . data_get($trainingCenter, 'name', '')) }}" loading="lazy">
+                                    <img class="img-thumbnail" style="width: 4rem; height: 4rem; object-fit: cover;" src="{{ rtrim($storageUrl, '/') . '/' . ltrim(data_get($trainingCenter, 'image.path'), '/') }}" alt="{{ data_get($trainingCenter, 'image.alt_text', 'Centro ' . data_get($trainingCenter, 'name', '')) }}" loading="lazy">
                                 @else
-                                    <span class="image-unavailable">Sin imagen</span>
+                                    <span class="text-secondary">Sin imagen</span>
                                 @endif
                             </td>
                             <td>{{ $trainingCenter['name'] ?? '' }}</td>
