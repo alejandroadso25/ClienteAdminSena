@@ -64,7 +64,14 @@
                         <tr>
                             <td>
                                 @if (data_get($trainingCenter, 'image.path'))
-                                    <img class="img-thumbnail" style="width: 4rem; height: 4rem; object-fit: cover;" src="{{ rtrim($storageUrl, '/') . '/' . ltrim(data_get($trainingCenter, 'image.path'), '/') }}" alt="{{ data_get($trainingCenter, 'image.alt_text', 'Centro ' . data_get($trainingCenter, 'name', '')) }}" loading="lazy">
+                                    @php
+                                        $imagePath = data_get($trainingCenter, 'image.path');
+                                        // Conserva URLs externas y resuelve las rutas relativas desde el storage del API.
+                                        $imageUrl = \Illuminate\Support\Str::startsWith($imagePath, ['http://', 'https://'])
+                                            ? $imagePath
+                                            : rtrim($storageUrl, '/') . '/' . ltrim($imagePath, '/');
+                                    @endphp
+                                    <img class="img-thumbnail" style="width: 4rem; height: 4rem; object-fit: cover;" src="{{ $imageUrl }}" alt="{{ data_get($trainingCenter, 'image.alt_text', 'Centro ' . data_get($trainingCenter, 'name', '')) }}" loading="lazy">
                                 @else
                                     <span class="text-secondary">Sin imagen</span>
                                 @endif

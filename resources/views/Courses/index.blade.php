@@ -83,7 +83,14 @@
                         <tr>
                             <td>
                                 @forelse (collect(data_get($course, 'images', []))->filter(fn ($image) => data_get($image, 'path')) as $courseImage)
-                                    <img class="img-thumbnail me-1 mb-1" style="width: 4rem; height: 4rem; object-fit: cover;" src="{{ rtrim($storageUrl, '/') . '/' . ltrim(data_get($courseImage, 'path'), '/') }}" alt="{{ data_get($courseImage, 'alt_text', 'Curso ' . data_get($course, 'course_number', '')) }}" loading="lazy">
+                                    @php
+                                        $imagePath = data_get($courseImage, 'path');
+                                        // Conserva URLs externas y resuelve las rutas relativas desde el storage del API.
+                                        $imageUrl = \Illuminate\Support\Str::startsWith($imagePath, ['http://', 'https://'])
+                                            ? $imagePath
+                                            : rtrim($storageUrl, '/') . '/' . ltrim($imagePath, '/');
+                                    @endphp
+                                    <img class="img-thumbnail me-1 mb-1" style="width: 4rem; height: 4rem; object-fit: cover;" src="{{ $imageUrl }}" alt="{{ data_get($courseImage, 'alt_text', 'Curso ' . data_get($course, 'course_number', '')) }}" loading="lazy">
                                 @empty
                                     <span class="text-secondary">Sin imagen</span>
                                 @endforelse
