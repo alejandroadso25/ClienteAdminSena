@@ -54,7 +54,11 @@ class ComputerController extends Controller
         $url = env('URL_SERVER_API');
         $computer = $this->fetchDataFromApi($url.'/computers/'.$id);
 
-        return view('Computers.show', compact('computer'));
+        // La vista usa esta URL base para resolver imágenes guardadas en el almacenamiento del API.
+        return view('Computers.show', [
+            'computer' => $computer,
+            'storageUrl' => $this->apiStorageUrl($url),
+        ]);
     }
 
     // Mostrar el formulario para editar un computador específico:
